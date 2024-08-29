@@ -1,26 +1,27 @@
 from flask import Flask, jsonify, request
-from flask_sqlalchemy  import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-app.config['SQLAlchemy_DATABAASE_URI'] = 'sqlite:///livros.db'
-           
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///livros.db'
+
 db = SQLAlchemy(app)
-                
-class Livro (db.Model):
-    id = db.colum(db.integer, primary_key=True)
-    titulo = db.colum(db.String(100),  nullable=False)
-    autor = db.colum(db.String(100), nullable=False)  
+
+class Livro(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    titulo = db.Column(db.String(100), nullable=False)
+    autor = db.Column(db.String(100), nullable=False)
 
 with app.app_context():
     db.create_all()
 
 livros = [
+    {'id': 1, 'titulo': '1984', 'autor': 'George Orwell'},
     {'id': 2, 'titulo': 'O Senhor dos Anéis', 'autor': 'J. R. R. Tolkien'},
-    {'id': 3, 'titulo': 'O prisioneiro de Azkhaban', 'autor': 'J. K. Rowling'},
+    {'id': 3, 'titulo': 'O Prisioneiro de Azkaban', 'autor': 'J. K. Rowling'}
 ]
 
-@app.route('/api/livros', methods= ['GET'])
+@app.route('/api/livros', methods=['GET'])
 def get_livros():
     return jsonify(livros)
 
